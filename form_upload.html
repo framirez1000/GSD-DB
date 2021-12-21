@@ -1,0 +1,33 @@
+<!DOCTYPE html><html><head><title></title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"><script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script><link rel="stylesheet" href="/stylesheets/style.css"><link rel="stylesheet" type="text/css" href="/stylesheets/iframeStyle.css"></head><script type="text/javascript">function add(fileName) {
+  var x = document.getElementById("rel_docs");
+  var opt = document.createElement("option");
+  opt.text = fileName;
+  //opt.text = document.getElementById('pdfdoc').value;
+  x.add(opt);
+  document.getElementById("rel_docs").value = opt.text; 
+  if(document.getElementById("docsString").value == ""){
+    document.getElementById("docsString").value = opt.text;
+  }
+  else{
+    document.getElementById("docsString").value = document.getElementById("docsString").value + ", " + opt.text;
+  }
+}</script><script type="text/javascript">// function invoked by the button element ----------------
+function SubmitDoc() {
+  alert('Submiting');
+  document.getElementById('docForm').submit();
+}
+function ValidateFileName(event) {
+  
+  const name = document.getElementById('inputfile').value;
+  //alert('FileName: ' + name);
+  const lastDot = name.lastIndexOf('.');
+  const lastSlash = name.lastIndexOf('\\');
+  const fileName = name.substring(lastSlash+1);
+  const ext = name.substring(lastDot + 1);
+  
+  if ((ext === 'pdf') || (ext === 'jpg')){
+    //alert('FileName: ' + fileName + ' ext: ' + ext);
+    add(fileName);
+    SubmitDoc();
+  }
+}</script><body class="mx-0" style="padding-top:35px"><form id="docForm" method="POST" action="/postpdf" enctype="multipart/form-data" max_width="55%"><label class="top-left" for="inputfile">Component related doc:</label><input class="mx-0" id="inputfile" type="file" name="inputfile"><button class="btn btn-secondary mt-4 top-right" id="validate" type="submit" max_width="15px">>></button></form><p></p></body></html>

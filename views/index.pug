@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  //h1= title
+  
+  
+  script(src='javascripts/db_demo_find_all_equip.js')
+  
+  div.index-center(id="data" style="margin:0 auto")
+    p Welcome to #{title}
+     div 
+      | As today <span id="datetime"> </span>, 
+      p we have the following informartion in the GBS data base:
+     ul
+       li #[strong Components:] !{data.components_count}
+       li #[strong Users:] !{data.users_count}
+       //li #[strong List:] !{data.components_list}
+       
+       
+  script.
+     var dt = new Date();
+     document.getElementById("datetime").innerHTML = dt.toLocaleString();
+  
+

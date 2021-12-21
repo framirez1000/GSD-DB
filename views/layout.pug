@@ -1,0 +1,110 @@
+doctype html
+html
+  head
+    title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css", integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z", crossorigin="anonymous")
+    script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js", integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj", crossorigin="anonymous")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js", integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV", crossorigin="anonymous")
+    link(rel='stylesheet', href='/stylesheets/style.css')
+
+    script(src="https://www.chartjs.org/assets/Chart.min.js")
+    script(src="https://code.jscharting.com/2.9.0/jscharting.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js")
+  block link
+    -var selected = 'home'; //default
+  
+  -var menu = [{title:'Home', ref:'/gbs_equipment/home', src:''}, {title:'FindAll', ref:'/gbs_equipment/component_list', src:''}];  
+  //-var menu = [{title:'Home', ref:'/', src:''}, {title:'FindAll', ref:'/api/test/guest', src:''}];
+    
+  block styles
+
+  body(onload='')
+    div(style="display:flex; vertical-align:middle")
+      div(style="")
+        img(src='../images/72_eli-np-rgb-grey.gif' style="hight:100px; width:150px;")
+      div(style="text-align:center; width:100%; vertical-align:middle; padding-top:50px")
+        h1 #{title}
+    div(id="header-blank")
+    
+    div
+      nav.navbar.navbar-expand-md.navbar-light.bg-orange.navbar-toggleable-md.navbar-faded.fixed-top
+        button.navbar-toggler.collapsed(id="collapsedButton", type="button", data-toggle="collapse", data-target="#main-navbar", aria-controls="main-navbar", aria-expanded="false", aria-label="Toggle navigation")
+          span.sr-only Toggle navigation
+          span.navbar-toggler-icon.menu-icon-size
+          span.my-1.mx-2.close.menu-icon-size ᐃ
+        
+        if (device === 'Mobile')
+            <ul class="nav navbar-nav.mr-auto mx-auto">
+              <li class="nav-item"><a class="nav-link" href="#">!{selected}</a></li>
+            </ul>
+            a.nav-link.fixed-right(href='') login
+        
+        a.navbar-brand.nav-brand(href='/') 
+          img(class="imgLogo", src= "/images/fr Logo-3.jpg", title="Home", alt="GSD-CDB")
+
+        #main-navbar.collapse.navbar-collapse(style= visibility)
+          ul.navbar-nav.mr-auto.horiz_list.navbar-nav.barnav-nav.nav-bold
+            each val in menu
+              if selected === val.title
+                li.nav-item.active
+                  a.nav-link(href=val.ref, title=val.title)= val.title 
+              else
+                li.nav-item
+                  a.nav-link(href=val.ref, title=val.title)= val.title 
+            
+            li.nav-item.dropdown
+              a#dropdown01.nav-link.dropdown-toggle(href="#", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Components actions
+              .dropdown-menu
+                a.dropdown-item(href="/gbs_equipment/add_component") Add
+                a.dropdown-item(href="/gbs_equipment/delete_comp") Delete
+                a.dropdown-item(href="/gbs_equipment/modify_comp") Modify 
+            li.nav-item.dropdown
+              a#userDrpDwn.nav-link.dropdown-toggle(href="#", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") User actions
+              .dropdown-menu
+                a.dropdown-item(href="/user/add") Add
+                a.dropdown-item(href="/user/remove") Remove
+                a.dropdown-item(href="/user/modify") Modify 
+                
+        span#logged-user !{user}
+        a.nav-link.fixed-right.nav-bold(href='/auth/logout') logout
+    div #{visibility}
+    div.
+      <script> 
+        $('#main-navbar').on('show hide', function(e){
+          if(!$(this).is(e.target)) return;
+          $('#collapsedButton').toggleClass('collapse icon-arrow-up', 200);});
+      </script>
+    script.
+      function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+
+      function checkCookie() {
+        var user=getCookie("user");
+        if (user != "") {
+          //alert("Welcome again " + user);
+          document.getElementById("logged-user").innerHTML = user;
+        }
+        document.getElementById("logged-user").innerHTML = user;
+      }
+   
+
+
+   
+
+    hr
+    block content

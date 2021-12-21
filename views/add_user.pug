@@ -1,0 +1,69 @@
+extends layout
+
+  
+block content
+  
+  center
+  
+    h6 Fill all required* fields carefully and click the submit button to add user to GBS DB
+    
+  div.container.col-4
+    form#userForm.border(method='POST' action='/user/add_user' style='min-height:520px')
+      div.form-group.m-5
+        input#h-input.form-control(type="hidden", name="h-input", value="") 
+        input#loggeduser.form-control(type="hidden", name="loggeduser", value="") 
+        div.row.m-3(style="display:flex")
+          div.col-12
+            label(for='firstName') Name:*
+            input#firstName.form-control(type='text', placeholder='name...' name='firstName' required='true' value=(undefined===user_data ? '' : user_data.firstName))
+        div.row.m-3
+          div.col-12
+            label(for='lastName') User last name:*
+            input#lastName.form-control(type='text', placeholder='last name...' name='lastName' required='true' value=(undefined===user_data ? '' : user_data.lastName))
+        div.row.m-3
+          div.col-12
+            label(for='email') email:*
+            input#email.form-control(type='email', placeholder='email...' name='email' required='true' value=(undefined===user_data ? '' : user_data.lastName))
+        div.row.m-3
+          div.col-12
+            label(for='username') Username:*
+            input#username.form-control(type='text', placeholder='username...' name='username' required='true' value=(undefined===user_data ? '' : user_data.username))
+        div.row.m-3(style="display:flex")
+          div.col-12
+            label(for='password') Password:*
+            input#password.form-control(type='password', placeholder='password....' name='password' required='true' value=(undefined===comp_data ? '' : comp_data.location))
+        div.row.m-3
+          div.col-12
+            label(for='roles') Roles:
+            input#roles.form-control(type='text', placeholder='roles....' name='roles' value=(undefined===comp_data ? '' : comp_data.subsystem))
+        div.row.m-3(style="display:flex; justify-content: right;padding-right=70px")
+          div.col-3()
+            button.btn.btn-secondary.btn-block(type='reset' max-width="60px") Clear form
+          div.col-1(style="margin-right:60px")
+            button.btn.btn-primary(type='submit' class=buttonClass onclick="submitFunct()") Submit
+
+  center
+      div #{error}
+
+  if errors
+   ul
+    for error in errors
+     li!= error.msg
+  
+  
+   
+  script.
+    function submitFunct() {
+      if(document.getElementById("h-input").value.length == 0){
+        var user=getCookie("user");
+        document.getElementById('loggeduser').value = user;
+        document.getElementById('userForm').submit();
+        alert('Submitted');
+      }
+      else{
+        alert('No Submitted');
+      }
+      
+    } 
+  
+

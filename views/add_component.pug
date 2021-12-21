@@ -1,0 +1,123 @@
+extends layout
+
+  
+block content
+  script(type='text/javascript').
+    function add(fileName) {
+      var x = document.getElementById("rel_docs");
+      var opt = document.createElement("option");
+      opt.text = fileName;
+      //opt.text = document.getElementById('pdfdoc').value;
+      x.add(opt);
+      document.getElementById("rel_docs").value = opt.text; 
+      if(document.getElementById("docsString").value == ""){
+        document.getElementById("docsString").value = opt.text;
+      }
+      else{
+        document.getElementById("docsString").value = document.getElementById("docsString").value + ", " + opt.text;
+      }
+    }
+  script(type='text/javascript').
+    // function invoked by the button element ----------------
+    function SubmitDoc() {
+      alert('Submiting');
+      document.getElementById('docForm').submit();
+    }
+    function ValidateFileName(event) {
+      
+      const name = document.getElementById('inputfile').value;
+      alert('FileName: ' + name);
+      const lastDot = name.lastIndexOf('.');
+      const lastSlash = name.lastIndexOf('\\');
+      const fileName = name.substring(lastSlash+1);
+      const ext = name.substring(lastDot + 1);
+      
+      if ((ext === 'pdf') || (ext === 'jpg')){
+        //alert('FileName: ' + fileName + ' ext: ' + ext);
+        add(fileName);
+        SubmitDoc();
+      }
+    }
+    
+    
+    
+    
+  h6 Fill the form carefully and click the submit button to add component to GBS DB
+
+  form#dataForm(method='POST' action='/gbs_equipment/add_component')
+    div.form-group
+      input#h-input.form-control(type="hidden", name="h-input", value="") 
+      input#user.form-control(type="hidden", name="user", value="") 
+      div.row.m-5(style="display:flex")
+        div.col  
+          label(for='comp_description') Component Description:
+          input#description.form-control(placeholder='description....' name='comp_description' value=(undefined===comp_data ? '' : comp_data.description) rows="2" cols="50")
+        div.col
+          label(for='module') Component Module:
+          input#module.form-control(type='text', placeholder='module...' name='module' value=(undefined===comp_data ? '' : comp_data.module))
+        div.col
+          label(for='location') Component location:
+          input#location.form-control(type='text', placeholder='location....' name='location' value=(undefined===comp_data ? '' : comp_data.location))
+      div.row.m-5(style="display:flex")
+        div.col
+          label(for='subsystem') Component subsystem:
+          input#subsystem.form-control(type='text', placeholder='subsystem....' name='subsystem' value=(undefined===comp_data ? '' : comp_data.subsystem))
+        div.col
+          label(for='sn') Component Serial number:
+          input#sn.form-control(type='text', placeholder='S/N....' name='sn' value=(undefined===comp_data ? '' : comp_data.sn))
+        div.col
+          label(for='manufacturer') Component Manufacturer:
+          input#manufacturer.form-control(type='text', placeholder='manufacturer...' name='manufacturer' value=(undefined===comp_data ? '' : comp_data.manufacturer))
+      div.row.m-5(style="display:flex")
+        div.col
+          label(for='code') Component LTI_code:
+          input#code.form-control(type='text', placeholder='code...' name='code' value=(undefined===comp_data ? '' : comp_data.code))
+        div.col
+          label(for='ref_code') Component ELI_code:
+          input#ref_code.form-control(type='text', placeholder='ref code....' name='ref_code' value=(undefined===comp_data ? '' : comp_data.ref_code))
+        div.col.hidden
+          label(for='id') Component ID:
+          input#id.form-control(type='text', placeholder='id...' name='id' value=(undefined===comp_data ? '' : comp_data.id))
+        
+      div.row.m-5(style="display:flex")
+        div.col
+          iframe(src="/form_upload.html", title='fileUpForm', width='800', height='150', scrolling='', frameborder='0')
+            //form#docForm(method='POST' action='/postpdf')
+            //  div.form-group
+            //    label(for='inputfile') Component related doc:
+            //    input#inputfile.form-control(type="file", name="inputfile")
+
+            //label(for='doc') Component related doc:
+            //input.form-control(id='doc' type='text' placeholder='doc name....' value=(undefined===comp_data ? '' : comp_data.rel_docs))
+            //div.col-1.px-5
+              //button#validate.btn.btn-secondary.mt-4(type='submit' onclick="ValidateFileName()" max_width="15px") >>
+        div.col
+          label(for='rel_docs') Component related docs:
+          select#rel_docs.form-control(type='select', placeholder='related docs....' name='rel_docs' value=(undefined===comp_data ? '' : comp_data.rel_docs))
+          input#docsString.form-control(type="hidden", name="docsString", value="") 
+      
+    div.row.m-5.bottom-right(style="display:flex")
+        div.col-7
+          button.btn.btn-secondary.btn-block(type='reset' width="30px") Clear form
+        div.col-1
+          button.btn.btn-primary(type='submit' class=buttonClass onclick="submitFunct()") Submit
+
+  if error
+    p!= error
+   
+  
+  
+   
+  script.
+    function submitFunct() {
+      if(document.getElementById("h-input").value.length == 0){
+        document.getElementById('dataForm').submit();
+        alert('Submitted');
+      }
+      else{
+        alert('No Submitted');
+      }
+      
+    } 
+  
+

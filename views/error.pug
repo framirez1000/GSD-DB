@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  center
+    title= title
+  center
+    h3= message
+    if (error) 
+      h5= error.status
+      pre #{error.stack}

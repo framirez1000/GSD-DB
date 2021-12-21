@@ -1,0 +1,116 @@
+extends layout
+block styles
+  link(rel="stylesheet", type="text/css", href="/stylesheets/styleTableRowsDrpDwn.css")
+  //include styleTableRowsDrpDwn.css
+block content
+  -var column_names = ["Component Description", "Module", "Location", "Subsystem", "Serial Number", "Manufacturer", "LTI Code", "ELI Component Code"]
+  -var columns_db = ['component_description', 'module', 'location', 'subsystem', 'serial_number', 'manufacturer', 'lti_code', 'eli_component_code']
+  //h1= title
+  
+  
+  div(id="data", style="margin:0 auto")
+    div.row
+      //div.col-2
+        //p Welcome to #[strong #{title}]
+      //div.col-12
+    div.row.ml-5.pl-5.mb-5
+          div.col-4
+            label#filterLabel.ellipsis(for='filterColumn') #[strong Filter by: ]
+            select#filterColumn.col(oninput="resetFilter()" style="height:23px")
+              option All
+              each columnName in column_names
+                option !{columnName}
+              
+          div.col-4
+            label#search-lbl.ellipsis(for='filterText') #[strong Search for: ]
+            input#filterText.col(type='text', onkeyup="filterTable()", onblur="leaveTextSearch()", placeholder='filter text...' name='filterText')       
+
+    div 
+     | 
+     p 
+    table#equipList
+        tr.header.header-sticking
+            th Item
+            each columnName in column_names
+                th #{columnName}
+            th.doc-col Documents
+        each component, index in data.components_list
+            tr.header
+                td.center-text #{(index+1)}
+                each column in columns_db 
+                    td !{component[ column ]}
+                td
+                  div.dropdown.doc-col
+                      button.dropbtn Related documents 
+                      div.dropdown-content
+                          each value in component.related_docs
+                              a(download=value+'.pdf' target="_blank"  href= 'public/pdfs/' + value + '.pdf') #{value}
+                
+         
+    script.     
+      function filterTable() {
+        // Variables
+        let index, filterText, table, tr, td, i, txtValue;
+        index = document.getElementById("filterColumn").selectedIndex;
+        filterText = document.getElementById("filterText").value.toUpperCase();
+        table = document.getElementById("equipList");
+        tr = table.getElementsByTagName("tr");
+        
+        // Loops through rows and hides those not matching the filter
+        for (i = 0; i < tr.length; i++) { // `for...of` iterate through the equipList
+          if (index>0){
+            td = tr[i].getElementsByTagName("td")[index];
+            if (td){
+              txtValue = td.textContent || td.innerText;
+              // if the filter is set to 'All', or this is the header row, or 2nd `td` text matches filter
+              if (tr[i].style.display != "none"){
+                if (txtValue.toUpperCase().indexOf(filterText) > -1) {
+                  tr[i].style.display = ""; // show row
+                }
+                else {
+                  tr[i].style.display = "none"; // hide row
+                }
+              }
+            }
+          }
+          else{
+            tr[i].style.display = ""; // show row
+          }
+        }
+        //alert("Label: " + document.getElementById("equipList").options[index].text);
+        
+      }
+      function leaveTextSearch() {
+        let index;
+        index = document.getElementById("filterColumn").selectedIndex;
+        document.getElementById("filterLabel").innerHTML = document.getElementById("filterLabel").innerHTML + " + " + document.getElementById("filterColumn").options[index].text;
+        document.getElementById("search-lbl").innerHTML = document.getElementById("search-lbl").innerHTML + " + " + document.getElementById("filterText").value;
+        //document.getElementById("filterText").value = 'filter_text...';
+        document.getElementById("filterLabel").title = document.getElementById("filterLabel").title + " + " + document.getElementById("filterColumn").options[index].text;;
+        document.getElementById("search-lbl").title = document.getElementById("search-lbl").title + " + " + document.getElementById("filterText").value;
+        
+      }
+      function resetFilter() { 
+        var index, table, tr, i;
+        index = document.getElementById("filterColumn").selectedIndex;
+        if (index == 0){
+          table = document.getElementById("equipList");
+          tr = table.getElementsByTagName("tr");
+          for (i = 0; i < tr.length; i++) { // `for...of` iterate through the equipList
+            tr[i].style.display = ""; // show row
+          }
+          document.getElementById("filterText").value = '';
+          document.getElementById("filterLabel").innerHTML = "Filter by: ";
+          document.getElementById("search-lbl").innerHTML = "Search for: ";
+          document.getElementById("filterLabel").title = "";
+          document.getElementById("search-lbl").title = "";
+        }
+        
+      }
+      function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+      }
+      
+      
+      
+  

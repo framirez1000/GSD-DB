@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  
+  center 
+    h6.m-5 Please, introduce your credentials to Sign-In
+
+  div.container.col-4
+    form#dataForm.border(method='POST' action='/auth/signin')
+      div.form-group.m-5
+        input#h-input.form-control(type="hidden", name="h-input", value="") 
+        div.row.m-3(style="display:flex")
+          div.col-12
+            label(for='id') Username:
+            input#username.form-control(type='text', placeholder='username...', name='username', style='width:100%', required="isRequired")
+        div.row.m-3
+          div.col-12.mb-3
+            label(for='code') Password
+            input#password.form-control(type='password', placeholder='password...' name='password', required="isRequired")
+        div.row.m-3.text-right(style="display:flex; align-text:right")
+          div.col-12
+            button.btn.btn-primary(type='submit' class=buttonClass onclick="submitFunct()") login...
+
+  center
+      div #{error}
